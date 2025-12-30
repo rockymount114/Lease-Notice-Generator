@@ -17,78 +17,92 @@
         .flex-container { display: flex; justify-content: space-between; }
         .flex-col { flex: 1; }
         .rent-details { display: flex; justify-content: space-around; margin-top: 1rem; }
+        .form-row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .form-row .form-group { flex: 1 1 auto; min-width: 150px; } /* Adjust min-width as needed */
+        .form-group-sm { flex: 0 0 120px; min-width: 120px; } /* Smaller width for specific fields */
+        input[type="date"] { width: auto; min-width: 120px; } /* Smaller width for date inputs */
     </style>
 </head>
 <body>
 
 <div class="form-container">
-    <h2>Notice Details</h2>
+    <h2>NC Eviction Notice Form</h2>
     <form id="noticeForm" action="/generate-pdf" method="post">
         
         <h3>From/Landlord Details</h3>
-        <div class="form-group">
-            <label>Landlord Name</label>
-            <input type="text" name="landlord_name" id="in_lname" placeholder="Landlord's full name" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Landlord Address</label>
-            <input type="text" name="landlord_address" id="in_landlord_address" placeholder="Landlord's full address" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Notice Date</label>
-            <input type="date" name="notice_date" id="in_date" oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Landlord Name</label>
+                <input type="text" name="landlord_name" id="in_lname" placeholder="Landlord's full name" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Landlord Address</label>
+                <input type="text" name="landlord_address" id="in_landlord_address" placeholder="Landlord's full address" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Notice Date</label>
+                <input type="date" name="notice_date" id="in_date" oninput="updatePreview()">
+            </div>
         </div>
 
         <hr>
 
         <h3>To/Tenant Details</h3>
-        <div class="form-group">
-            <label>Tenant Names</label>
-            <input type="text" name="tenant_names" id="in_tenant_names" placeholder="Tenant's name list" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Property Address</label>
-            <input type="text" name="property_address" id="in_addr" placeholder="Property full address" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Lease Start Date</label>
-            <input type="date" name="lease_date" id="in_lease_date" oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Tenant Names</label>
+                <input type="text" name="tenant_names" id="in_tenant_names" placeholder="Tenant's name list" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Property Address</label>
+                <input type="text" name="property_address" id="in_addr" placeholder="Property full address" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Lease Start Date</label>
+                <input type="date" name="lease_date" id="in_lease_date" oninput="updatePreview()">
+            </div>
         </div>
 
         <hr>
 
         <h3>Rent Details</h3>
-        <div class="form-group">
-            <label>Rent Due Start Date</label>
-            <input type="date" name="rental_due_start_date" id="in_rental_due_start_date" oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Rent Due Start Date</label>
+                <input type="date" name="rental_due_start_date" id="in_rental_due_start_date" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Rent Due End Date</label>
+                <input type="date" name="rental_due_end_date" id="in_rental_due_end_date" oninput="updatePreview()">
+            </div>
         </div>
-        <div class="form-group">
-            <label>Rent Due End Date</label>
-            <input type="date" name="rental_due_end_date" id="in_rental_due_end_date" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Rent Due ($)</label>
-            <input type="number" name="rent_due" id="in_rent" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Late Fees ($)</label>
-            <input type="number" name="late_fees" id="in_late_fees" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Other Fees ($)</label>
-            <input type="number" name="other_fees" id="in_other_fees" oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Rent Due ($)</label>
+                <input type="number" name="rent_due" id="in_rent" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Late Fees ($)</label>
+                <input type="number" name="late_fees" id="in_late_fees" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Other Fees ($)</label>
+                <input type="number" name="other_fees" id="in_other_fees" oninput="updatePreview()">
+            </div>
         </div>
 
         <hr>
 
         <h3>Signature & Contact</h3>
-        <div class="form-group">
-            <label>Telephone</label>
-            <input type="text" name="telephone" id="in_telephone" placeholder="Your telephone number"oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>E-mail</label>
-            <input type="email" name="email" id="in_email" placeholder="Your email address" oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Telephone</label>
+                <input type="text" name="telephone" id="in_telephone" placeholder="Your telephone number"oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" id="in_email" placeholder="Your email address" oninput="updatePreview()">
+            </div>
         </div>
         <label>Draw Signature Below:</label>
         <canvas id="signature-pad"></canvas>
@@ -98,29 +112,31 @@
         <hr>
 
         <h3>Affidavit of Service</h3>
-        <div class="form-group">
-            <label>State</label>
-            <input type="text" name="state" id="in_state" placeholder="NC" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>County</label>
-            <input type="text" name="county" id="in_county" placeholder="Wake" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Date of Service</label>
-            <input type="date" name="date_of_service" id="in_date_of_service" oninput="updatePreview()">
-        </div>
-        <div class="form-group">
-            <label>Authorized Individual Name (for other personal delivery)</label>
-            <input type="text" name="authorized_individual_name" id="in_authorized_individual_name" placeholder="Name who deliver"oninput="updatePreview()">
+        <div class="form-row">
+            <div class="form-group">
+                <label>State</label>
+                <input type="text" name="state" id="in_state" placeholder="NC" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>County</label>
+                <input type="text" name="county" id="in_county" placeholder="Wake" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label>Date of Service</label>
+                <input type="date" name="date_of_service" id="in_date_of_service" oninput="updatePreview()">
+            </div>
+            <div class="form-group form-group-sm">
+                <label>Authorized Individual Name (for other personal delivery)</label>
+                <input type="text" name="authorized_individual_name" id="in_authorized_individual_name" placeholder="Name who deliver"oninput="updatePreview()">
+            </div>
         </div>
         
         <input type="hidden" name="rent_period" value="December 2025">
         <input type="hidden" name="total_due" value="0.00">
-        <input type="hidden" name="print_name" value="Li Yuan">
+        <input type="hidden" name="print_name" value="">
 
         <br>
-        <button type="submit" onclick="saveSignature()">Download PDF</button>
+        <button type="submit">Download PDF</button>
     </form>
 </div>
 
@@ -163,7 +179,7 @@
             </p>
             <p>
                 <strong>Signature:</strong> <span id="preview_signature_line">______________________________</span> <strong>Date:</strong> <span id="preview_signature_date">____________________</span><br>
-                <strong>Print Name:</strong> <span id="preview_print_name"></span><br>
+                <strong>Print Name:</strong> <span id="preview_print_name" style="text-transform: uppercase;"></span><br>
                 <strong>Telephone:</strong> <span id="preview_telephone"></span><br>
                 <strong>E-mail:</strong> <span id="preview_email"></span>
             </p>
@@ -192,16 +208,16 @@
             <p>[ ] <strong>POSTED AT THE RENTAL PREMISES.</strong> This notice was posted in a conspicuous location at the Rental Premises after an unsuccessful attempt to deliver the notice personally to the Tenant in possession of said Rental Premises.</p>
             <p>[ ] <strong>REGISTERED / CERTIFIED MAIL.</strong> This notice was sent to the Tenant in possession of the Rental Premises via the following mail carrier:</p>
             <blockquote style="margin-left:20px">
-                <p>[ ] USPS Registered Mail (mail receipt # __________________________)</p>
-                <p>[ ] USPS Certified Mail (mail receipt # __________________________)</p>
+                <p>[ ] USPS Registered Mail (mail receipt # _____________________)</p>
+                <p>[ ] USPS Certified Mail (mail receipt # ______________________)</p>
                 <p>[ ] FedEx (with signature confirmation requested)</p>
                 <p>[ ] UPS (with signature confirmation requested)</p>
-                <p>[ ] Other: ___________________________________________</p>
+                <p>[ ] Other: ____________________________</p>
             </blockquote>
             <p><strong>I declare under penalty of perjury that the foregoing statements are true and correct.</strong></p>
             <p>
-                <strong>Signature:</strong> <span id="preview_affidavit_signature_line">___________________________________________</span><br>
-                <strong>Print Name:</strong> <span id="preview_affidavit_print_name">___________________________________________</span>
+                <strong>Signature:</strong> <span id="preview_affidavit_signature_line">_____________________________</span><br>
+                <strong>Print Name:</strong> <span id="preview_affidavit_print_name">________________________________</span>
             </p>
         </div>
     </div>
@@ -210,6 +226,7 @@
 <script>
     const canvas = document.getElementById('signature-pad');
     const signaturePad = new SignaturePad(canvas);
+    const noticeForm = document.getElementById('noticeForm');
 
     function saveSignature() {
         if (!signaturePad.isEmpty()) {
@@ -217,6 +234,8 @@
         }
     }
 
+    noticeForm.addEventListener('submit', saveSignature);
+    
     function updatePreview() {
         // From visible inputs (Notice Details)
         document.getElementById('preview_notice_date').innerText = document.getElementById('in_date').value;
@@ -224,6 +243,7 @@
         document.getElementById('preview_landlord_name').innerText = landlordName;
         document.getElementById('preview_print_name').innerText = landlordName;
         document.getElementById('preview_affidavit_name').innerText = landlordName;
+        document.getElementById('preview_affidavit_print_name').innerText = landlordName;
         document.getElementById('preview_property_address').innerText = document.getElementById('in_addr').value;
         document.getElementById('preview_landlord_address').innerText = document.getElementById('in_landlord_address').value;
         document.getElementById('preview_state').innerText = document.getElementById('in_state').value || '_________';

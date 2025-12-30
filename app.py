@@ -41,25 +41,34 @@ def generate_pdf():
     pdf.ln(5)
 
     # Totals
-    pdf.cell(50, 8, f"Rent Due: ${data.get('rent_due')}", ln=True)
-    pdf.cell(50, 8, f"Late Fees: ${data.get('late_fees')}", ln=True)
+    rent_due = float(data.get('rent_due') or 0)
+    late_fees = float(data.get('late_fees') or 0)
+    other_fees = float(data.get('other_fees') or 0)
+    total_due = rent_due + late_fees + other_fees
+
+    pdf.cell(50, 8, f"Rent Due: ${rent_due:.2f}", ln=True)
+    pdf.cell(50, 8, f"Late Fees: ${late_fees:.2f}", ln=True)
+    pdf.cell(50, 8, f"Other Fees: ${other_fees:.2f}", ln=True)
     pdf.set_font("Arial", 'B', 11)
-    pdf.cell(50, 8, f"Total Amount Due: ${data.get('total_due')}", ln=True)
+    pdf.cell(50, 8, f"Total Amount Due: ${total_due:.2f}", ln=True)
     pdf.ln(10)
 
     # Signature Logic
     if signature_data and "," in signature_data:
         # Remove header of base64 string
         header, encoded = signature_data.split(",", 1)
+        # e.g., header = "data:image/png;base64"
+        image_type = header.split(';')[0].split('/')[1]
+
         img_data = base64.b64decode(encoded)
         img_buffer = io.BytesIO(img_data)
         
         pdf.cell(0, 8, "Signature:", ln=True)
-        # Place signature image (adjust width/height as needed)
-        pdf.image(img_buffer, x=pdf.get_x(), y=pdf.get_y(), w=40)
+        # Place signature image, specifying the type
+        pdf.image(img_buffer, x=pdf.get_x(), y=pdf.get_y(), w=40, type=image_type)
         pdf.ln(15)
 
-    pdf.cell(0, 8, f"Print Name: {data.get('print_name')}", ln=True)
+    pdf.cell(0, 8, f"Print Name: {data.get('landlord_name')}", ln=True)
     pdf.cell(0, 8, f"Phone: {data.get('telephone')}", ln=True)
 
     # Second Page: Affidavit of Service
@@ -106,22 +115,21 @@ def generate_pdf():
     # Second Signature
     if signature_data and "," in signature_data:
         # Re-use image data from first page
-        header, encoded = signature_data.split(",", 1)
-        img_data = base64.b64decode(encoded)
-        img_buffer = io.BytesIO(img_data)
+        # No need to decode again, just reset the buffer's position
+        img_buffer.seek(0)
 
         pdf.cell(0, 8, "Signature:", ln=True)
-        pdf.image(img_buffer, x=pdf.get_x(), y=pdf.get_y(), w=40)
+        pdf.image(img_buffer, x=pdf.get_x(), y=pdf.get_y(), w=40, type=image_type)
         pdf.ln(15)
 
-    pdf.cell(0, 8, f"Print Name: {data.get('print_name')}", ln=True)
+    pdf.cell(0, 8, f"Print Name: {data.get('landlord_name')}", ln=True)
     
     output = io.BytesIO()
     pdf_out = pdf.output(dest='S').encode('latin-1')
     output.write(pdf_out)
     output.seek(0)
 
-    return send_file(output, as_attachment=True, download_name="Signed_Notice.pdf")
+    return send_file(output, as_attachment=True, download_name="Signed_Notice.pdf", mimetype='application/pdf')
 
 if __name__ == '__main__':
     app.run(debug=True)
