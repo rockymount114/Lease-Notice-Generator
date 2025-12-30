@@ -130,3 +130,6 @@ def generate_pdf():
     finally:
         if temp_image_path and os.path.exists(temp_image_path):
             os.remove(temp_image_path)
+
+if __name__ == '__main__':
+    app.run(debug=True)
