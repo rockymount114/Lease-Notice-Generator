@@ -7,7 +7,7 @@
         body { font-family: 'Segoe UI', sans-serif; display: flex; gap: 20px; padding: 20px; background: #f4f4f9; }
         .form-container { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .preview-container { flex: 1; background: #525659; padding: 40px; border-radius: 8px; color: black; display: flex; justify-content: center; }
-        .page-preview { background: white; width: 100%; max-width: 700px; min-height: 600px; padding: 30px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .page-preview { background: white; width: 100%; max-width: 800px; min-height: 600px; padding: 30px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
         .form-group { margin-bottom: 12px; }
         label { font-size: 12px; font-weight: bold; color: #555; }
         input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
@@ -110,7 +110,7 @@
             <canvas id="signature-pad"></canvas>
         </div>
         <input type="hidden" name="signature_img" id="signature_img">
-        <button type="button" onclick="signaturePad.clear()">Clear Signature</button>
+        <button type="button" id="clear-signature">Clear Signature</button>
 
         <hr>
 
@@ -181,7 +181,7 @@
                 Pursuant to Section 42-3, North Carolina General Statutes, you are required to pay the total amount due in full within <strong>TEN (10) DAYS</strong> after your receipt of this notice. Failure to pay within the specified time period will result in the termination of the Lease, and you will be required to surrender possession of the Rental Premises.
             </p>
             <p>
-                <strong>Signature:</strong> <span id="preview_signature_line">______________________________</span> <strong>Date:</strong> <span id="preview_signature_date">____________________</span><br>
+                <strong>Signature:</strong> <img id="preview_signature_image" src="" alt="Signature" style="height: 30px; vertical-align: middle; border-bottom: 1px solid black;"> <strong>Date:</strong> <span id="preview_signature_date">____________________</span><br>
                 <strong>Print Name:</strong> <span id="preview_print_name" style="text-transform: uppercase;"></span><br>
                 <strong>Telephone:</strong> <span id="preview_telephone"></span><br>
                 <strong>E-mail:</strong> <span id="preview_email"></span>
@@ -219,7 +219,7 @@
             </blockquote>
             <p><strong>I declare under penalty of perjury that the foregoing statements are true and correct.</strong></p>
             <p>
-                <strong>Signature:</strong> <span id="preview_affidavit_signature_line">_____________________________</span><br>
+                <strong>Signature:</strong> <img id="preview_affidavit_signature_image" src="" alt="Signature" style="height: 30px; vertical-align: middle; border-bottom: 1px solid black;"><br>
                 <strong>Print Name:</strong> <span id="preview_affidavit_print_name">________________________________</span>
             </p>
         </div>

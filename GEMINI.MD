@@ -23,12 +23,15 @@
     - Improved signature submission reliability by using a form `submit` event listener instead of an `onclick` event on the button.
 - **Robust Float Conversion**: Fixed a `ValueError` by making the string-to-float conversion in the backend more robust, ensuring that empty form values for monetary fields are correctly handled as `0.0`.
 - **Application Startup Fix**: Restored the `if __name__ == '__main__':` block in `app.py` to allow the Flask application to be run directly.
-- **Signature Pad Usability Fix**: Improved the signature pad's usability and responsiveness. This involved:
+- **Signature Pad Usability Fix**: Resolved a critical issue where the signature pad and live preview were non-functional. The root cause was that the JavaScript was executing before the DOM was fully loaded. This was fixed by:
+    - Wrapping all JavaScript code in `static/js/index.js` within a `DOMContentLoaded` event listener.
+    - Adding an event listener to the signature pad to update the live preview in real-time as the user draws.
+    - Removing the now-redundant `oninput` attributes from the HTML and centralizing event handling in the JavaScript file.
     - Correcting the CSS to ensure the canvas properly fills its container, fixing drawing and cursor alignment issues.
     - Implementing a robust `resizeCanvas` function to handle high-DPI displays and window resizing.
-    - Fixing a critical syntax error in `static/js/index.js` by removing erroneous `<script>` tags that prevented the JavaScript from executing.
-- **Live Preview Placeholder Improvement**: Enhanced the live preview to correctly display placeholder lines (e.g., "________________") for fields like "Landlord Name" when they are empty, providing a clearer visual representation before user input.
+- **Live Preview Placeholder Improvement**: Enhanced the live preview to correctly display placeholder lines (e.g., "________________") for all relevant fields when they are empty, including dynamic placeholders for empty text fields, dates, and calculated fields. This also includes displaying the drawn signature dynamically via `<img>` tags.
 - **Increased Preview Page Width**: Increased the `max-width` of the preview pages from `500px` to `700px` in `templates/index.html` to provide more space for content and improve readability.
+- **"Clear Signature" Button Fix**: Fixed the "Clear Signature" button by removing the inline `onclick` attribute and adding a proper event listener in `static/js/index.js`. This resolves a scope issue where the `signaturePad` object was not accessible globally. The button now correctly clears the signature pad and updates the live preview.
 
 ## How to use
 1. Run `pip install flask fpdf`.
