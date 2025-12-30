@@ -23,6 +23,10 @@
     - Improved signature submission reliability by using a form `submit` event listener instead of an `onclick` event on the button.
 - **Robust Float Conversion**: Fixed a `ValueError` by making the string-to-float conversion in the backend more robust, ensuring that empty form values for monetary fields are correctly handled as `0.0`.
 - **Application Startup Fix**: Restored the `if __name__ == '__main__':` block in `app.py` to allow the Flask application to be run directly.
+- **Signature Pad Usability Fix**: Improved the signature pad's usability and responsiveness. This involved:
+    - Correcting the CSS to ensure the canvas properly fills its container, fixing drawing and cursor alignment issues.
+    - Implementing a robust `resizeCanvas` function to handle high-DPI displays and window resizing.
+    - Fixing a critical syntax error in `static/js/index.js` by removing erroneous `<script>` tags that prevented the JavaScript from executing.
 
 ## How to use
 1. Run `pip install flask fpdf`.

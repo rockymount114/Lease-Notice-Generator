@@ -1,4 +1,3 @@
-<script>
     const canvas = document.getElementById('signature-pad');
     const signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'rgb(250, 250, 250)' // Same as CSS background
@@ -73,4 +72,3 @@
 
     // Initial call to populate preview
     document.addEventListener('DOMContentLoaded', updatePreview);
-</script>
