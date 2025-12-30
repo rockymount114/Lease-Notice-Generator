@@ -11,7 +11,10 @@ This Flask application provides a web-based interface to generate a two-page "No
 - **Placeholder Support**: The live preview displays placeholder lines for empty fields and shows a default signature image before one is drawn.
 - **Responsive UI**: A clean, two-column layout with the form on one side and the live preview on the other.
 
-![Signature Preview](static/images/preview_affidavit_signature_image.png)
+### Application Screenshots
+
+<img src="static/images/preview page1.png" alt="Preview Page 1" width="400"/>
+<img src="static/images/preview page2.png" alt="Preview Page 2" width="400"/>
 
 ## Technology Stack
 
