@@ -62,6 +62,60 @@ def generate_pdf():
     pdf.cell(0, 8, f"Print Name: {data.get('print_name')}", ln=True)
     pdf.cell(0, 8, f"Phone: {data.get('telephone')}", ln=True)
 
+    # Second Page: Affidavit of Service
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(0, 10, 'AFFIDAVIT OF SERVICE', 0, 1, 'C')
+    pdf.ln(10)
+
+    pdf.set_font("Arial", size=11)
+    pdf.cell(0, 8, f"STATE OF {data.get('state', '_________')}", ln=True)
+    pdf.cell(0, 8, f"{data.get('county', '_________')} COUNTY", ln=True)
+    pdf.cell(0, 8, f"Date of Service: {data.get('date_of_service', '_________')}", ln=True)
+    pdf.ln(10)
+
+    pdf.multi_cell(0, 6, f"I, {data.get('landlord_name')}, the Landlord, hereby declare that the foregoing notice was properly delivered and served in the following manner:")
+    pdf.ln(5)
+
+    # Checkbox options (represented as text)
+    pdf.cell(0, 8, "[ ] PERSONAL DELIVERY. This notice was delivered personally to the Tenant in possession of the Rental Premises.", ln=True)
+    pdf.cell(0, 8, "[ ] OTHER PERSONAL DELIVERY. This notice was delivered personally to:", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.multi_cell(0, 6, f"[ ] An authorized individual, named {data.get('authorized_individual_name', '_________')}, who was present at the Rental Premises upon an attempted delivery of this notice to the Tenant in possession of said Rental Premises.")
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.multi_cell(0, 6, f"[ ] An authorized individual, named {data.get('authorized_individual_name', '_________')}, at the following location known to be the Tenant's place of work: _______________________________.")
+    
+    pdf.cell(0, 8, "[ ] POSTED AT THE RENTAL PREMISES. This notice was posted in a conspicuous location at the Rental Premises after an unsuccessful attempt to deliver the notice personally to the Tenant in possession of said Rental Premises.", ln=True)
+    pdf.cell(0, 8, "[ ] REGISTERED / CERTIFIED MAIL. This notice was sent to the Tenant in possession of the Rental Premises via the following mail carrier:", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.cell(0, 8, "[ ] USPS Registered Mail (mail receipt # __________________________)", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.cell(0, 8, "[ ] USPS Certified Mail (mail receipt # __________________________)", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.cell(0, 8, "[ ] FedEx (with signature confirmation requested)", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.cell(0, 8, "[ ] UPS (with signature confirmation requested)", ln=True)
+    pdf.set_x(pdf.get_x() + 10)
+    pdf.cell(0, 8, "[ ] Other: ___________________________________________", ln=True)
+    pdf.ln(10)
+
+    pdf.set_font("Arial", 'B', 11)
+    pdf.multi_cell(0, 6, "I declare under penalty of perjury that the foregoing statements are true and correct.")
+    pdf.ln(10)
+
+    # Second Signature
+    if signature_data and "," in signature_data:
+        # Re-use image data from first page
+        header, encoded = signature_data.split(",", 1)
+        img_data = base64.b64decode(encoded)
+        img_buffer = io.BytesIO(img_data)
+
+        pdf.cell(0, 8, "Signature:", ln=True)
+        pdf.image(img_buffer, x=pdf.get_x(), y=pdf.get_y(), w=40)
+        pdf.ln(15)
+
+    pdf.cell(0, 8, f"Print Name: {data.get('print_name')}", ln=True)
+    
     output = io.BytesIO()
     pdf_out = pdf.output(dest='S').encode('latin-1')
     output.write(pdf_out)

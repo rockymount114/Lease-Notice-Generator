@@ -44,9 +44,9 @@ Pursuant to Section 42-3, North Carolina General Statutes, you are required to p
 
 **AFFIDAVIT OF SERVICE**
 
-**STATE OF** __________________________
+**STATE OF** ___`state`___________
 
-**__________________________ COUNTY** **Date of Service:** `date of service` [ ] AM [ ] PM
+**____`county`_________ COUNTY** **Date of Service:** `date of service` [ ] AM [ ] PM
 
 I, `landlord name`, the Landlord, hereby declare that the foregoing notice was properly delivered and served in the following manner:
 
