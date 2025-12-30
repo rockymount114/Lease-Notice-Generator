@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lease Notice Generator</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; display: flex; gap: 20px; padding: 20px; background: #f4f4f9; }
+        .form-container { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .preview-container { flex: 1; background: #525659; padding: 40px; border-radius: 8px; color: black; display: flex; justify-content: center; }
+        .page-preview { background: white; width: 100%; max-width: 500px; min-height: 600px; padding: 30px; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+        .form-group { margin-bottom: 12px; }
+        label { font-size: 12px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; }
+        #signature-pad { border: 1px dashed #ccc; background: #fafafa; width: 100%; height: 100px; cursor: crosshair; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Notice Details</h2>
+    <form id="noticeForm" action="/generate-pdf" method="post">
+        <div class="form-group">
+            <label>Notice Date</label>
+            <input type="date" name="notice_date" id="in_date" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Landlord Name</label>
+            <input type="text" name="landlord_name" id="in_lname" placeholder="Li Yuan" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Property Address</label>
+            <input type="text" name="property_address" id="in_addr" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Rent Due ($)</label>
+            <input type="number" name="rent_due" id="in_rent" oninput="updatePreview()">
+        </div>
+        
+        <label>Draw Signature Below:</label>
+        <canvas id="signature-pad"></canvas>
+        <input type="hidden" name="signature_img" id="signature_img">
+        <button type="button" onclick="signaturePad.clear()">Clear Signature</button>
+
+        <div class="form-group">
+            <label>Landlord Address</label>
+            <input type="text" name="landlord_address" id="in_landlord_address" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Tenant Names</label>
+            <input type="text" name="tenant_names" id="in_tenant_names" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Lease Start Date</label>
+            <input type="date" name="lease_date" id="in_lease_date" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Rent Due Start Date</label>
+            <input type="date" name="rental_due_start_date" id="in_rental_due_start_date" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Rent Due End Date</label>
+            <input type="date" name="rental_due_end_date" id="in_rental_due_end_date" oninput="updatePreview()">
+        </div>
+        <input type="hidden" name="rent_period" value="December 2025">
+        <div class="form-group">
+            <label>Late Fees ($)</label>
+            <input type="number" name="late_fees" id="in_late_fees" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Other Fees ($)</label>
+            <input type="number" name="other_fees" id="in_other_fees" oninput="updatePreview()">
+        </div>
+        <input type="hidden" name="total_due" value="1575.00">
+        <input type="hidden" name="print_name" value="Li Yuan">
+        <div class="form-group">
+            <label>Telephone</label>
+            <input type="text" name="telephone" id="in_telephone" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" name="email" id="in_email" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Date of Service</label>
+            <input type="date" name="date_of_service" id="in_date_of_service" oninput="updatePreview()">
+        </div>
+        <div class="form-group">
+            <label>Authorized Individual Name (for other personal delivery)</label>
+            <input type="text" name="authorized_individual_name" id="in_authorized_individual_name" oninput="updatePreview()">
+        </div>
+        
+        <br>
+        <button type="submit" onclick="saveSignature()">Download PDF</button>
+    </form>
+</div>
+
+<div class="preview-container">
+    <div class="page-preview" id="preview-box">
+        <div class="page">
+            <h3 style="text-align: center;"><strong>NOTICE TO PAY RENT OR VACATE</strong></h3>
+            <p>
+                <strong>FROM:</strong> <span id="preview_landlord_name"></span><br>
+                <strong>ADDRESS:</strong> <span id="preview_landlord_address"></span><br>
+                <strong>DATE OF NOTICE:</strong> <span id="preview_notice_date"></span>
+            </p>
+            <p>
+                <strong>TO:</strong> <span id="preview_tenant_names"></span> (collectively, the "Tenant")<br>
+                <strong>PROPERTY ADDRESS:</strong> <span id="preview_property_address"></span> ("Rental Premises")
+            </p>
+            <p>Dear Tenant:</p>
+            <p>
+                PLEASE TAKE NOTICE that you are in default of the lease agreement entered into on <span id="preview_lease_date"></span>, between you and the Landlord for the Rental Premises (the "Lease") for failure to pay rent. You owe the following amount in PAST DUE RENT for the rental period of <span id="preview_rent_period"></span>:
+            </p>
+            <ul>
+                <li><strong>Rent Due:</strong> $<span id="preview_rent_due">0.00</span></li>
+                <li><strong>Late Fees:</strong> $<span id="preview_late_fees">0.00</span></li>
+                <li><strong>Other Fees:</strong> $<span id="preview_other_fees">0.00</span></li>
+            </ul>
+            <p><strong>Total Amount Due: $<span id="preview_total_due">0.00</span></strong></p>
+            <p>
+                Pursuant to Section 42-3, North Carolina General Statutes, you are required to pay the total amount due in full within <strong>TEN (10) DAYS</strong> after your receipt of this notice. Failure to pay within the specified time period will result in the termination of the Lease, and you will be required to surrender possession of the Rental Premises.
+            </p>
+            <p>
+                <strong>Signature:</strong> <span id="preview_signature_line">______________________________</span> <strong>Date:</strong> <span id="preview_signature_date">____________________</span><br>
+                <strong>Print Name:</strong> <span id="preview_print_name"></span><br>
+                <strong>Telephone:</strong> <span id="preview_telephone"></span><br>
+                <strong>E-mail:</strong> <span id="preview_email"></span>
+            </p>
+        </div>
+        <div class="page" style="margin-top: 40px; page-break-before: always;">
+            <h3 style="text-align: center;"><strong>AFFIDAVIT OF SERVICE</strong></h3>
+            <p>
+                <strong>STATE OF</strong> __________________________<br>
+                <strong>__________________________ COUNTY</strong> <strong>Date of Service:</strong> <span id="preview_date_of_service"></span> [ ] AM [ ] PM
+            </p>
+            <p>
+                I, <span id="preview_affidavit_name"></span>, the Landlord, hereby declare that the foregoing notice was properly delivered and served in the following manner:
+            </p>
+            <p>[ ] <strong>PERSONAL DELIVERY.</strong> This notice was delivered personally to the Tenant in possession of the Rental Premises.</p>
+            <p>[ ] <strong>OTHER PERSONAL DELIVERY.</strong> This notice was delivered personally to:</p>
+            <blockquote style="margin-left:20px">
+                <p>[ ] An authorized individual, named <span id="preview_authorized_individual_name_1">_____________________________________</span>, who was present at the Rental Premises upon an attempted delivery of this notice to the Tenant in possession of said Rental Premises.</p>
+                <p>[ ] An authorized individual, named <span id="preview_authorized_individual_name_2">_____________________________________</span>, at the following location known to be the Tenant's place of work:<br>
+                _______________________________________________________________________________.</p>
+            </blockquote>
+            <p>[ ] <strong>POSTED AT THE RENTAL PREMISES.</strong> This notice was posted in a conspicuous location at the Rental Premises after an unsuccessful attempt to deliver the notice personally to the Tenant in possession of said Rental Premises.</p>
+            <p>[ ] <strong>REGISTERED / CERTIFIED MAIL.</strong> This notice was sent to the Tenant in possession of the Rental Premises via the following mail carrier:</p>
+            <blockquote style="margin-left:20px">
+                <p>[ ] USPS Registered Mail (mail receipt # __________________________)</p>
+                <p>[ ] USPS Certified Mail (mail receipt # __________________________)</p>
+                <p>[ ] FedEx (with signature confirmation requested)</p>
+                <p>[ ] UPS (with signature confirmation requested)</p>
+                <p>[ ] Other: ___________________________________________</p>
+            </blockquote>
+            <p><strong>I declare under penalty of perjury that the foregoing statements are true and correct.</strong></p>
+            <p>
+                <strong>Signature:</strong> <span id="preview_affidavit_signature_line">___________________________________________</span><br>
+                <strong>Print Name:</strong> <span id="preview_affidavit_print_name">___________________________________________</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas);
+
+    function saveSignature() {
+        if (!signaturePad.isEmpty()) {
+            document.getElementById('signature_img').value = signaturePad.toDataURL();
+        }
+    }
+
+    function updatePreview() {
+        // From visible inputs (Notice Details)
+        document.getElementById('preview_notice_date').innerText = document.getElementById('in_date').value;
+        const landlordName = document.getElementById('in_lname').value;
+        document.getElementById('preview_landlord_name').innerText = landlordName;
+        document.getElementById('preview_print_name').innerText = landlordName;
+        document.getElementById('preview_affidavit_name').innerText = landlordName;
+        document.getElementById('preview_property_address').innerText = document.getElementById('in_addr').value;
+        document.getElementById('preview_landlord_address').innerText = document.getElementById('in_landlord_address').value;
+        document.getElementById('preview_tenant_names').innerText = document.getElementById('in_tenant_names').value;
+        document.getElementById('preview_lease_date').innerText = document.getElementById('in_lease_date').value;
+        
+        const rentalDueStartDate = document.getElementById('in_rental_due_start_date').value;
+        const rentalDueEndDate = document.getElementById('in_rental_due_end_date').value;
+        let rentPeriod = "";
+        if (rentalDueStartDate && rentalDueEndDate) {
+            rentPeriod = `${rentalDueStartDate} to ${rentalDueEndDate}`;
+        } else if (rentalDueStartDate) {
+            rentPeriod = rentalDueStartDate;
+        } else if (rentalDueEndDate) {
+            rentPeriod = rentalDueEndDate;
+        }
+        document.getElementById('preview_rent_period').innerText = rentPeriod;
+
+        const rentDue = parseFloat(document.getElementById('in_rent').value) || 0;
+        document.getElementById('preview_rent_due').innerText = rentDue.toFixed(2);
+        const lateFees = parseFloat(document.getElementById('in_late_fees').value) || 0;
+        document.getElementById('preview_late_fees').innerText = lateFees.toFixed(2);
+        const otherFees = parseFloat(document.getElementById('in_other_fees').value) || 0;
+        document.getElementById('preview_other_fees').innerText = otherFees.toFixed(2);
+
+        const totalDue = rentDue + lateFees + otherFees;
+        document.getElementById('preview_total_due').innerText = totalDue.toFixed(2);
+
+        document.getElementById('preview_telephone').innerText = document.getElementById('in_telephone').value;
+        document.getElementById('preview_email').innerText = document.getElementById('in_email').value;
+
+        // From visible inputs (Affidavit of Service)
+        document.getElementById('preview_date_of_service').innerText = document.getElementById('in_date_of_service').value;
+        document.getElementById('preview_authorized_individual_name_1').innerText = document.getElementById('in_authorized_individual_name').value;
+        document.getElementById('preview_authorized_individual_name_2').innerText = document.getElementById('in_authorized_individual_name').value;
+    }
+
+    // Initial call to populate preview
+    document.addEventListener('DOMContentLoaded', updatePreview);
+</script>
+
+</body>
+</html>
