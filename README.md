@@ -44,8 +44,6 @@ PDF page 2 review
 
 ---
 
-### Support My Work
+### Support This Project
 
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="rockymount114" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>
-
-**Note:** The "Buy Me a Coffee" button script above is provided as plain text and may not render as an interactive button in all Markdown viewers (e.g., GitHub). For an interactive experience, you might need to view this `README.md` in a compatible environment or integrate it into a web page.
+[![Buy Me a Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=rockymount114&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff)](https://www.buymeacoffee.com/rockymount114)
